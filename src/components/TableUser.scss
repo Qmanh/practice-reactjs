@@ -1,0 +1,46 @@
+.sort-header{
+    display: flex;
+    justify-content: space-between;
+
+    i{
+        cursor: pointer;
+        padding: 0 2px;
+    }
+}
+.app-container{
+    .add-new{
+    //   display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .group-btn{
+        display: flex;
+        gap: 10px;
+
+        i{
+            margin-right:10px;
+        }
+    }
+}
+
+.customize-table{
+    width: inherit;
+    overflow-x: auto;
+
+    .actionCss{
+        text-align: center;
+        padding: 5px;
+    
+    // .editCss{
+    //     text-align: center;
+    //     margin-right: 10px;
+    // }
+    .deleteCss{
+        
+        margin-top: 3px;
+    }
+    }
+}
+    .pagination{
+        justify-content: center;
+    }
