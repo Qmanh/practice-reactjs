@@ -1,16 +1,18 @@
 import { useEffect, useState, useContext } from "react";
 import "./login.scss";
-import { loginApi } from "../services/UserService";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { UsersContext } from "../context/UserContext";
+import { handleLoginRedux } from "../redux/actions/userAction";
+import { useDispatch, useSelector } from "react-redux";
+
 const Login = () =>{
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [isShowPassword, setIsShowPassword]= useState(false);
 
-    const {loginContext} = useContext(UsersContext);
-    const [loadingAPI,setLoadingAPI]=useState(false);
+    const dispatch = useDispatch();
+    const isLoading= useSelector(state => state.user.isLoading);
+    const account= useSelector(state => state.user.account);
     const navigate = useNavigate();
 
     // useEffect(()=>{
@@ -26,18 +28,9 @@ const Login = () =>{
             toast.error("Email or Password is required");
             return;
         }
-        setLoadingAPI(true);
-        let res = await loginApi(email.trim(),password);
-        console.log(">>> check res: ",res);
-        if(res && res.token){
-            loginContext(email,res.token);
-            navigate("/");
-        }else{
-            if(res && res.status === 400){
-                toast.error(res.data.error);
-            }
-        }
-        setLoadingAPI(false);
+
+        dispatch(handleLoginRedux(email,password));
+
     }
 
     const handleGoBack=()=>{
@@ -49,6 +42,13 @@ const Login = () =>{
             handleLogin();
         }
     }
+
+    useEffect(()=>{
+        if(account && account.auth=== true){
+            navigate("/");
+        }
+    },[account])
+
     return (
         <>
             <div className="login-container col-12 col-sm-4">
@@ -73,7 +73,7 @@ const Login = () =>{
                     className={email && password ? "active": ""}
                     disabled={(email && password ) ? false: true}
                     onClick={()=>handleLogin()}>
-                    {loadingAPI && <i className="fas fa-sync fa-spin"></i>}
+                    {isLoading && <i className="fas fa-sync fa-spin"></i>}
                     &nbsp;Log in
                 </button>
                 <div className="back">
