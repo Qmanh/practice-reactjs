@@ -2,10 +2,11 @@ import { Alert } from "react-bootstrap";
 import {  useContext } from "react";
 import {Routes, Route} from "react-router-dom";
 import { UsersContext } from "../context/UserContext";
+import { useSelector } from "react-redux";
 
 const PrivateRoute = (props)=>{
 
-    const {user} = useContext(UsersContext);
+    const user = useSelector(state => state.user.account)
     if(user && !user.auth){
         return <>
            <Alert variant="danger" className="mt-3">
